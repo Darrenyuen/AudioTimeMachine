@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.os.Process
 import android.util.Log
 import android.view.View
@@ -31,10 +32,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         toTrackPage?.setOnClickListener(this)
         if (Build.VERSION.SDK_INT > 23) {
             Log.d(TAG, "申请录音权限")
-            val request = ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
-            if (request != PackageManager.PERMISSION_GRANTED) {
+            val audioPer = ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO)
+            val writePer = ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            val readPer = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            val createPer = ContextCompat.checkSelfPermission(this, android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS)
+            if (audioPer != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.RECORD_AUDIO), 666)
             }
+            if (writePer != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 6666)
+            }
+            if (readPer != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 777)
+            }
+            if (createPer != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS), 7)
+            }
+            Log.d(TAG, "PackageManager.PERMISSION_GRANTED audio $audioPer writePer $writePer readPer $readPer")
         }
     }
 

@@ -75,7 +75,9 @@ public class AudioRecorder {
         if (status == Status.STATUS_START) throw new IllegalStateException("正在录音");
         audioRecord.startRecording();
         mRecordThread = new RecordThread("RecordThread");
+        mRecordThread.start();
         if (mRecordListener != null) mRecordListener.onStopRecord();
+        status = Status.STATUS_START;
     }
 
     public void pauseRecord() {
