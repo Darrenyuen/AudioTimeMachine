@@ -48,34 +48,36 @@ class RecordPage : AppCompatActivity(), View.OnClickListener {
         record?.setOnClickListener(this)
         pause?.setOnClickListener(this)
 
-        AudioRecorder.getInstance().createDefaultRecorder()
+//        AudioRecorder.getInstance().createDefaultRecorder()
 
-        AudioRecorder.getInstance().setRecordListener(object : AudioRecorder.RecordListener {
-            override fun onStartRecord() {
+//        AudioRecorder.getInstance().setRecordListener(object : AudioRecorder.RecordListener {
+//            override fun onStartRecord() {
+//
+//            }
+//
+//            override fun onRecordData(bytes: ByteArray?) {
+//                Log.d(TAG, file!!.absolutePath)
+//                try {
+//                    if (!file!!.exists()) file?.createNewFile()
+//                } catch (e: IOException) {
+//                    e.printStackTrace()
+//                }
+//                try {
+//                    outputStream = FileOutputStream(file)
+//                    bufferedOutputStream = BufferedOutputStream(outputStream!!)
+//                    dataOutputStream = DataOutputStream(bufferedOutputStream)
+//                    dataOutputStream?.write(bytes!!)
+//                } catch (t: Throwable) {
+//
+//                }
+//            }
+//
+//            override fun onStopRecord() {
+//                dataOutputStream?.close()
+//            }
+//        })
 
-            }
-
-            override fun onRecordData(bytes: ByteArray?) {
-                Log.d(TAG, file!!.absolutePath)
-                try {
-                    if (!file!!.exists()) file?.createNewFile()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                try {
-                    outputStream = FileOutputStream(file)
-                    bufferedOutputStream = BufferedOutputStream(outputStream!!)
-                    dataOutputStream = DataOutputStream(bufferedOutputStream)
-                    dataOutputStream?.write(bytes!!)
-                } catch (t: Throwable) {
-
-                }
-            }
-
-            override fun onStopRecord() {
-                dataOutputStream?.close()
-            }
-        })
+        AudioRecordManager.getInstance().initConfig()
     }
 
     override fun onClick(v: View?) {
@@ -84,13 +86,15 @@ class RecordPage : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this@RecordPage, "开始录制", Toast.LENGTH_SHORT).show()
                 record?.visibility = View.GONE
                 pause?.visibility = View.VISIBLE
-                AudioRecorder.getInstance().startRecord()
+//                AudioRecorder.getInstance().startRecord()
+                AudioRecordManager.getInstance().startRecord(file?.absolutePath)
             }
             R.id.pause -> {
                 Toast.makeText(this@RecordPage, "暂停录制", Toast.LENGTH_SHORT).show()
                 pause?.visibility = View.GONE
                 record?.visibility = View.VISIBLE
-                AudioRecorder.getInstance().stopRecord()
+//                AudioRecorder.getInstance().stopRecord()
+                AudioRecordManager.getInstance().stopRecord()
             }
         }
     }
