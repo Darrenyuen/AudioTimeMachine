@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * yuan
@@ -34,7 +35,8 @@ public class AudioRecordManager {
     /*是否正在录音*/
     private boolean mIsRecording = false;
     /*文件输出流*/
-    private FileOutputStream mFileOutputStream;
+    private OutputStream outputStream;
+//    private FileOutputStream mFileOutputStream;
     /*文件输出路径*/
     private String mOutputFilePath;
 
@@ -152,13 +154,13 @@ public class AudioRecordManager {
         @Override
         public void run() {
             try {
-                mFileOutputStream = new FileOutputStream(mOutputFilePath);
+                outputStream = new FileOutputStream(mOutputFilePath);
                 byte[] audioDataArray = new byte[mBufferSizeInBytes];
                 while (mIsRecording){
                     int audioDataSize = getAudioRecordBufferSize(mBufferSizeInBytes,audioDataArray);
                     if (audioDataSize > 0) {
                         Log.d(TAG, "写入采集得到的音频数据");
-                        mFileOutputStream.write(audioDataArray);
+                        outputStream.write(audioDataArray);
                     }else {
                         mIsRecording = false;
                     }
@@ -169,9 +171,9 @@ public class AudioRecordManager {
                 e.printStackTrace();
             }finally {
                 try {
-                    if (null != mFileOutputStream){
-                        mFileOutputStream.close();
-                        mFileOutputStream = null;
+                    if (null != outputStream){
+                        outputStream.close();
+                        outputStream = null;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -188,8 +190,7 @@ public class AudioRecordManager {
      */
     private int getAudioRecordBufferSize(int bufferSizeInBytes, byte[] audioDataArray) {
         if (mAudioRecord != null){
-            int size = mAudioRecord.read(audioDataArray,0,bufferSizeInBytes);
-            return size;
+            return mAudioRecord.read(audioDataArray,0,bufferSizeInBytes);
         }else {
             return 0;
         }

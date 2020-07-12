@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.jarvis.audiotimemachine.recorder.Recorder
+import com.jarvis.audiotimemachine.recorder.RecorderFactory
 import java.io.*
 
 class RecordPage : AppCompatActivity(), View.OnClickListener {
@@ -28,11 +30,14 @@ class RecordPage : AppCompatActivity(), View.OnClickListener {
 
 //    private var recordFileDir = Settings.Global.getFile
 
+    var recorder: Recorder? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_record_page)
 
         file = File(this.filesDir, "recorddata.pcm")
+        Log.d(TAG, file?.absolutePath ?: "")
 
         if (file!!.exists()) {
             Log.d(TAG, "文件已存在，先删除")
@@ -77,7 +82,11 @@ class RecordPage : AppCompatActivity(), View.OnClickListener {
 //            }
 //        })
 
-        AudioRecordManager.getInstance().initConfig()
+//        AudioRecordManager.getInstance().initConfig()
+
+        val recorderFactory = RecorderFactory()
+        recorder = recorderFactory.getRecorder("AudioRecord")
+        recorder?.initConfig()
     }
 
     override fun onClick(v: View?) {
@@ -87,14 +96,16 @@ class RecordPage : AppCompatActivity(), View.OnClickListener {
                 record?.visibility = View.GONE
                 pause?.visibility = View.VISIBLE
 //                AudioRecorder.getInstance().startRecord()
-                AudioRecordManager.getInstance().startRecord(file?.absolutePath)
+//                AudioRecordManager.getInstance().startRecord(file?.absolutePath)
+                recorder?.start(file?.absolutePath)
             }
             R.id.pause -> {
                 Toast.makeText(this@RecordPage, "暂停录制", Toast.LENGTH_SHORT).show()
                 pause?.visibility = View.GONE
                 record?.visibility = View.VISIBLE
 //                AudioRecorder.getInstance().stopRecord()
-                AudioRecordManager.getInstance().stopRecord()
+//                AudioRecordManager.getInstance().stopRecord()
+                recorder?.stop()
             }
         }
     }

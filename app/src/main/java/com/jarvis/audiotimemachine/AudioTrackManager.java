@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * yuan
@@ -51,8 +52,8 @@ public class AudioTrackManager {
 
     public void initConfig() {
         if (audioTrack != null) audioTrack.release();
-        mBufferSizeInBytes = AudioTrack.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 16000, AudioFormat.CHANNEL_CONFIGURATION_MONO,
+        mBufferSizeInBytes = AudioTrack.getMinBufferSize(44100, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+        audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 44100, AudioFormat.CHANNEL_IN_STEREO,
                 AudioFormat.ENCODING_PCM_16BIT, mBufferSizeInBytes, AudioTrack.MODE_STREAM);
     }
 
@@ -117,7 +118,7 @@ public class AudioTrackManager {
         @Override
         public void run() {
             try {
-                FileInputStream fileInputStream = new FileInputStream(new File(mFilePath));
+                InputStream fileInputStream = new FileInputStream(new File(mFilePath));
                 mDataInputStream = new DataInputStream(fileInputStream);
                 byte[] audioDataArray = new byte[mBufferSizeInBytes];
                 int readLength = 0;
